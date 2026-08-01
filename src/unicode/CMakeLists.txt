@@ -1,0 +1,12 @@
+target_sources(
+    qualix
+    PRIVATE
+        codepoint.cpp
+        utf8.cpp
+        grapheme_property.cpp
+        emoji_property.cpp
+        indic_conjunct.cpp
+        grapheme_segmenter.cpp
+        general_category.cpp
+        normalizer.cpp
+)

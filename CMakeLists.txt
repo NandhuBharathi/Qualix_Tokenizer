@@ -40,3 +40,5 @@ endif()
 if(QUALIX_BUILD_TOOLS)
     add_subdirectory(tools)
 endif()
+
+add_subdirectory(apps)
