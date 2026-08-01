@@ -61,3 +61,36 @@ qualix_add_test(test_percentage_rule)
 qualix_add_test(test_percentage_pretokenizer)
 qualix_add_test(test_currency_rule)
 qualix_add_test(test_currency_pretokenizer)
+
+add_executable(
+    test_date_rule
+    test_date_rule.cpp
+)
+
+target_link_libraries(
+    test_date_rule
+    PRIVATE
+        qualix
+)
+
+add_test(
+    NAME test_date_rule
+    COMMAND test_date_rule
+)
+
+add_executable(
+    test_date_pretokenizer
+    test_date_pretokenizer.cpp
+)
+
+target_link_libraries(
+    test_date_pretokenizer
+    PRIVATE
+        qualix
+)
+
+add_test(
+    NAME test_date_pretokenizer
+    COMMAND test_date_pretokenizer
+)
+

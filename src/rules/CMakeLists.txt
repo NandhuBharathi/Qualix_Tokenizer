@@ -7,4 +7,5 @@ target_sources(
         email_rule.cpp
         percentage_rule.cpp
         currency_rule.cpp
+        date_rule.cpp
 )

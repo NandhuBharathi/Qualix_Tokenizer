@@ -7,6 +7,7 @@
 #include "rules/url_rule.hpp"
 #include "rules/email_rule.hpp"
 #include "rules/currency_rule.hpp"
+#include "rules/date_rule.hpp"
 #include "rules/percentage_rule.hpp"
 #include "rules/number_rule.hpp"
 #include "unicode/grapheme_segmenter.hpp"
@@ -113,6 +114,10 @@ rules::RuleEngine CreateRuleEngine()
 
     engine.Add(
         std::make_unique<rules::UrlRule>()
+    );
+
+    engine.Add(
+        std::make_unique<rules::DateRule>()
     );
 
     engine.Add(
