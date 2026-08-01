@@ -21,6 +21,7 @@ enum class SpanType
     Date,
     Time,
     Currency,
+    Percentage,
     Measurement,
     Math,
     Code,
@@ -69,6 +70,9 @@ constexpr std::string_view ToString(
 
         case SpanType::Currency:
             return "Currency";
+
+        case SpanType::Percentage:
+            return "Percentage";
 
         case SpanType::Measurement:
             return "Measurement";

@@ -1,9 +1,52 @@
-Hello தமிழ் வணக்கம்!
-हिन्दी क्ष नमस्ते
-中文测试
-한국어 테스트
-العربية
-é café
-₹ $ € © ™ → ∑ ∞
-👍🏽 ❤️ 🇮🇳
-👨‍👩‍👧‍👦
+Hello world!
+தமிழ் மொழி அழகானது.
+नमस्ते दुनिया
+こんにちは世界
+안녕하세요 세계
+
+Numbers:
+123
+-42
+12.75
+1,234,567
+1,25,000
+12,34,56,789
+1.2e10
+0xFF
+0b1010
+0o755
+
+Percentages:
+50%
+12.5%
+-25%
+7.5‰
+
+Currencies:
+$500
+€99.99
+£250
+¥1000
+₹500
+₹1,25,000
+Rs.500
+Rs. 1,25,000
+ரூ.500
+ரூ. 1,25,000
+USD 1,234.50
+500 INR
+
+Email:
+user@example.com
+hello.world+test@example.co.in
+
+URLs:
+https://example.com
+https://example.com/path?q=1
+www.example.org
+example.com
+
+Mixed:
+Pay ₹1,25,000 with a 12.5% discount.
+Contact user@example.com or visit https://example.com today.
+Tamil தமிழ் English 123 ₹500 50% 👍🏽

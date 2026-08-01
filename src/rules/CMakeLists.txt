@@ -1,0 +1,10 @@
+target_sources(
+    qualix
+    PRIVATE
+        rule_engine.cpp
+        url_rule.cpp
+        number_rule.cpp
+        email_rule.cpp
+        percentage_rule.cpp
+        currency_rule.cpp
+)

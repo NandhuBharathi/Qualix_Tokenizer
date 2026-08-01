@@ -11,3 +11,4 @@ target_include_directories(
 add_subdirectory(core)
 add_subdirectory(unicode)
 add_subdirectory(pretokenizer)
+add_subdirectory(rules)
