@@ -162,3 +162,36 @@ add_test(
     NAME test_measurement_pretokenizer
     COMMAND test_measurement_pretokenizer
 )
+
+
+add_executable(
+    test_phone_rule
+    test_phone_rule.cpp
+)
+
+target_link_libraries(
+    test_phone_rule
+    PRIVATE
+        qualix
+)
+
+add_test(
+    NAME test_phone_rule
+    COMMAND test_phone_rule
+)
+
+add_executable(
+    test_phone_pretokenizer
+    test_phone_pretokenizer.cpp
+)
+
+target_link_libraries(
+    test_phone_pretokenizer
+    PRIVATE
+        qualix
+)
+
+add_test(
+    NAME test_phone_pretokenizer
+    COMMAND test_phone_pretokenizer
+)

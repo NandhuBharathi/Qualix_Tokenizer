@@ -9,6 +9,7 @@
 #include "rules/currency_rule.hpp"
 #include "rules/date_rule.hpp"
 #include "rules/time_rule.hpp"
+#include "rules/phone_rule.hpp"
 #include "rules/measurement_rule.hpp"
 #include "rules/percentage_rule.hpp"
 #include "rules/number_rule.hpp"
@@ -69,6 +70,9 @@ SpanType ToSpanType(
 
         case rules::RuleType::Time:
             return SpanType::Time;
+
+        case rules::RuleType::Phone:
+            return SpanType::Phone;
 
         case rules::RuleType::Number:
             return SpanType::Number;
@@ -135,6 +139,10 @@ rules::RuleEngine CreateRuleEngine()
 
     engine.Add(
         std::make_unique<rules::MeasurementRule>()
+    );
+
+    engine.Add(
+        std::make_unique<rules::PhoneRule>()
     );
 
     engine.Add(

@@ -9,5 +9,6 @@ target_sources(
         currency_rule.cpp
         date_rule.cpp
         time_rule.cpp
+        phone_rule.cpp
         measurement_rule.cpp
 )

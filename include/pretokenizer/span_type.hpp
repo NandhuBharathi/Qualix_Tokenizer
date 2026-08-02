@@ -20,6 +20,7 @@ enum class SpanType
     Email,
     Date,
     Time,
+    Phone,
     Currency,
     Percentage,
     Measurement,
@@ -67,6 +68,9 @@ constexpr std::string_view ToString(
 
         case SpanType::Time:
             return "Time";
+
+        case SpanType::Phone:
+            return "Phone";
 
         case SpanType::Currency:
             return "Currency";

@@ -12,6 +12,7 @@ enum class RuleType
     Email,
     Date,
     Time,
+    Phone,
     Number,
     Currency,
     Percentage,
@@ -37,6 +38,8 @@ constexpr std::string_view ToString(
             return "Date";
         case RuleType::Time:
             return "Time";
+        case RuleType::Phone:
+            return "Phone";
         case RuleType::Number:
             return "Number";
         case RuleType::Currency:
