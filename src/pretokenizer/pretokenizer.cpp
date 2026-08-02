@@ -11,6 +11,7 @@
 #include "rules/time_rule.hpp"
 #include "rules/phone_rule.hpp"
 #include "rules/measurement_rule.hpp"
+#include "rules/math_rule.hpp"
 #include "rules/percentage_rule.hpp"
 #include "rules/number_rule.hpp"
 #include "unicode/grapheme_segmenter.hpp"
@@ -143,6 +144,10 @@ rules::RuleEngine CreateRuleEngine()
 
     engine.Add(
         std::make_unique<rules::PhoneRule>()
+    );
+
+    engine.Add(
+        std::make_unique<rules::MathRule>()
     );
 
     engine.Add(

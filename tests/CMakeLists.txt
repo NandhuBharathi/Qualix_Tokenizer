@@ -195,3 +195,37 @@ add_test(
     NAME test_phone_pretokenizer
     COMMAND test_phone_pretokenizer
 )
+
+add_executable(
+    test_math_rule
+    test_math_rule.cpp
+)
+
+target_link_libraries(
+    test_math_rule
+    PRIVATE
+        qualix
+)
+
+add_test(
+    NAME test_math_rule
+    COMMAND test_math_rule
+)
+
+
+
+add_executable(
+    test_math_pretokenizer
+    test_math_pretokenizer.cpp
+)
+
+target_link_libraries(
+    test_math_pretokenizer
+    PRIVATE
+        qualix
+)
+
+add_test(
+    NAME test_math_pretokenizer
+    COMMAND test_math_pretokenizer
+)

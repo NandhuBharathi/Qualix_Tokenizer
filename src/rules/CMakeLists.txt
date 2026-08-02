@@ -10,5 +10,6 @@ target_sources(
         date_rule.cpp
         time_rule.cpp
         phone_rule.cpp
+        math_rule.cpp
         measurement_rule.cpp
 )
