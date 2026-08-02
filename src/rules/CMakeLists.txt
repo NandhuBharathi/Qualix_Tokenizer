@@ -8,5 +8,6 @@ target_sources(
         percentage_rule.cpp
         currency_rule.cpp
         date_rule.cpp
-    measurement_rule.cpp
+        time_rule.cpp
+        measurement_rule.cpp
 )

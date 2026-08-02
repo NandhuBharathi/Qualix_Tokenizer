@@ -97,6 +97,40 @@ add_test(
 
 
 add_executable(
+    test_time_rule
+    test_time_rule.cpp
+)
+
+target_link_libraries(
+    test_time_rule
+    PRIVATE
+        qualix
+)
+
+add_test(
+    NAME test_time_rule
+    COMMAND test_time_rule
+)
+
+
+add_executable(
+    test_time_pretokenizer
+    test_time_pretokenizer.cpp
+)
+
+target_link_libraries(
+    test_time_pretokenizer
+    PRIVATE
+        qualix
+)
+
+add_test(
+    NAME test_time_pretokenizer
+    COMMAND test_time_pretokenizer
+)
+
+
+add_executable(
     test_measurement_rule
     test_measurement_rule.cpp
 )

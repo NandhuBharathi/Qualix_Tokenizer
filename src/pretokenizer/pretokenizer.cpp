@@ -8,6 +8,7 @@
 #include "rules/email_rule.hpp"
 #include "rules/currency_rule.hpp"
 #include "rules/date_rule.hpp"
+#include "rules/time_rule.hpp"
 #include "rules/measurement_rule.hpp"
 #include "rules/percentage_rule.hpp"
 #include "rules/number_rule.hpp"
@@ -122,6 +123,10 @@ rules::RuleEngine CreateRuleEngine()
 
     engine.Add(
         std::make_unique<rules::DateRule>()
+    );
+
+    engine.Add(
+        std::make_unique<rules::TimeRule>()
     );
 
     engine.Add(

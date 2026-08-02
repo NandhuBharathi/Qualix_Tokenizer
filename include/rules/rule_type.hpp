@@ -43,6 +43,8 @@ constexpr std::string_view ToString(
             return "Currency";
         case RuleType::Percentage:
             return "Percentage";
+        case RuleType::Measurement:
+            return "Measurement";
         case RuleType::Math:
             return "Math";
         case RuleType::Code:

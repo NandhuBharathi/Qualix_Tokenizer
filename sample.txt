@@ -36,6 +36,28 @@ Rs. 1,25,000
 USD 1,234.50
 500 INR
 
+Dates:
+12/03/2026
+31/12/2025
+1/8/2026
+2026-08-02
+2024-02-29
+29.02.2024
+
+Measurements:
+10kg
+10 kg
+1.5km
+-12.5 cm
+-20°C
+98.6°F
+2.4GHz
+220V
+5kW
+500 MB
+1.5GB
+5ms
+
 Email:
 user@example.com
 hello.world+test@example.co.in
@@ -49,4 +71,10 @@ example.com
 Mixed:
 Pay ₹1,25,000 with a 12.5% discount.
 Contact user@example.com or visit https://example.com today.
+On 12/03/2026 buy 10kg for ₹500 with 20% discount.
+
+Multilingual:
 Tamil தமிழ் English 123 ₹500 50% 👍🏽
+தமிழ் எடை 10 kg.
+वजन 10 kg है।
+重量は10kgです。
