@@ -257,23 +257,18 @@ int main()
                 result.Value();
 
             Expect(
-                spans.size() == 2,
+                spans.size() == 1,
                 "Percentage boundary span count"
             );
 
-            if (spans.size() == 2)
+            if (spans.size() == 1)
             {
                 Expect(
-                    spans[0].View(input) == "50" &&
-                    spans[0].type == SpanType::Number &&
+                    spans[0].View(input) == "50%" &&
+                    spans[0].type ==
+                        SpanType::Percentage &&
                     spans[0].Protected(),
-                    "Percentage number protected"
-                );
-
-                Expect(
-                    spans[1].View(input) == "%" &&
-                    !spans[1].Protected(),
-                    "Percent sign separate"
+                    "Percentage protected"
                 );
             }
         }

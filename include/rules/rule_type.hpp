@@ -15,6 +15,7 @@ enum class RuleType
     Number,
     Currency,
     Percentage,
+    Measurement,
     Math,
     Code
 };

@@ -290,7 +290,7 @@ int main()
                     span.View(text);
 
                 if (span.type ==
-                        SpanType::Number &&
+                        SpanType::Percentage &&
                     view == "50%")
                 {
                     percentage =

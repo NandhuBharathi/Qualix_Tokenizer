@@ -8,6 +8,7 @@
 #include "rules/email_rule.hpp"
 #include "rules/currency_rule.hpp"
 #include "rules/date_rule.hpp"
+#include "rules/measurement_rule.hpp"
 #include "rules/percentage_rule.hpp"
 #include "rules/number_rule.hpp"
 #include "unicode/grapheme_segmenter.hpp"
@@ -77,6 +78,9 @@ SpanType ToSpanType(
         case rules::RuleType::Percentage:
             return SpanType::Percentage;
 
+        case rules::RuleType::Measurement:
+            return SpanType::Measurement;
+
         case rules::RuleType::Math:
             return SpanType::Math;
 
@@ -122,6 +126,10 @@ rules::RuleEngine CreateRuleEngine()
 
     engine.Add(
         std::make_unique<rules::CurrencyRule>()
+    );
+
+    engine.Add(
+        std::make_unique<rules::MeasurementRule>()
     );
 
     engine.Add(

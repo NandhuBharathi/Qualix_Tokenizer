@@ -94,3 +94,37 @@ add_test(
     COMMAND test_date_pretokenizer
 )
 
+
+
+add_executable(
+    test_measurement_rule
+    test_measurement_rule.cpp
+)
+
+target_link_libraries(
+    test_measurement_rule
+    PRIVATE
+        qualix
+)
+
+add_test(
+    NAME test_measurement_rule
+    COMMAND test_measurement_rule
+)
+
+
+add_executable(
+    test_measurement_pretokenizer
+    test_measurement_pretokenizer.cpp
+)
+
+target_link_libraries(
+    test_measurement_pretokenizer
+    PRIVATE
+        qualix
+)
+
+add_test(
+    NAME test_measurement_pretokenizer
+    COMMAND test_measurement_pretokenizer
+)
