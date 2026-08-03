@@ -85,16 +85,16 @@ RuleMatch PercentageRule::Match(
             suffix_start - byte_offset
         );
 
-    const RuleMatch number =
-        number_rule_.Match(
+    const NumericScan number =
+        NumericScanner::Scan(
             number_view,
             0
         );
 
-    if (!number.Matched())
+    if (!number.matched)
         return {};
 
-    if (number.byte_length !=
+    if (number.ByteLength() !=
         number_view.size())
     {
         return {};

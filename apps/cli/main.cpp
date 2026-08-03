@@ -1,3 +1,4 @@
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -36,20 +37,63 @@ Result<std::string> ReadFile(
     };
 }
 
-void PrintText(
+void WriteText(
+    std::ostream& output,
     std::string_view text
 )
 {
     if (text == "\n")
-        std::cout << "\\n";
+        output << "\\n";
     else if (text == "\r")
-        std::cout << "\\r";
+        output << "\\r";
     else if (text == "\t")
-        std::cout << "\\t";
+        output << "\\t";
     else if (text == " ")
-        std::cout << "<SPACE>";
+        output << "<SPACE>";
     else
-        std::cout << text;
+        output << text;
+}
+
+void PrintText(
+    std::string_view text
+)
+{
+    WriteText(
+        std::cout,
+        text
+    );
+}
+
+std::filesystem::path MakeOutputPath(
+    const std::string& input_path
+)
+{
+    const std::filesystem::path input{
+        input_path
+    };
+
+    const auto stem =
+        input.stem().string();
+
+    // Kaggle working root.
+    // Example:
+    // sample.txt -> /kaggle/working/sample.pretokens.txt
+    const std::filesystem::path kaggle_root{
+        "/kaggle/working"
+    };
+
+    if (std::filesystem::exists(kaggle_root))
+    {
+        return kaggle_root /
+            (stem + ".pretokens.txt");
+    }
+
+    // Portable fallback outside Kaggle.
+    const auto parent =
+        input.parent_path();
+
+    return parent /
+        (stem + ".pretokens.txt");
 }
 
 void PrintUsage()
@@ -178,7 +222,26 @@ int PretokenizeFile(
     const auto& spans =
         result.Value();
 
-    std::cout
+    const auto output_path =
+        MakeOutputPath(path);
+
+    std::ofstream output(
+        output_path,
+        std::ios::binary |
+        std::ios::trunc
+    );
+
+    if (!output)
+    {
+        std::cerr
+            << "Error: failed to create output file: "
+            << output_path.string()
+            << "\n";
+
+        return 1;
+    }
+
+    output
         << "================================\n"
         << "Qualix PreTokenizer\n"
         << "================================\n\n"
@@ -204,13 +267,16 @@ int PretokenizeFile(
         const auto view =
             span.View(text);
 
-        std::cout
+        output
             << i
             << " : [";
 
-        PrintText(view);
+        WriteText(
+            output,
+            view
+        );
 
-        std::cout
+        output
             << "]"
             << " type="
             << ToString(span.type)
@@ -231,7 +297,7 @@ int PretokenizeFile(
             << "\n";
     }
 
-    std::cout
+    output
         << "\n================================\n"
         << "Summary\n"
         << "================================\n"
@@ -244,6 +310,32 @@ int PretokenizeFile(
         << "PreToken spans   : "
         << spans.size()
         << "\n"
+        << "================================\n";
+
+    output.close();
+
+    if (!output)
+    {
+        std::cerr
+            << "Error: failed while writing output file\n";
+
+        return 1;
+    }
+
+    std::cout
+        << "================================\n"
+        << "Qualix PreTokenizer\n"
+        << "================================\n"
+        << "Input  : "
+        << path
+        << "\n"
+        << "Output : "
+        << output_path.string()
+        << "\n"
+        << "Spans  : "
+        << spans.size()
+        << "\n"
+        << "Status : SUCCESS\n"
         << "================================\n";
 
     return 0;

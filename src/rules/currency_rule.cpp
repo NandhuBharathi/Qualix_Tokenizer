@@ -174,8 +174,7 @@ bool IsCodePrefix(
         );
 }
 
-RuleMatch MatchEmbeddedNumber(
-    const NumberRule& rule,
+NumericScan MatchEmbeddedNumber(
     std::string_view input,
     usize number_start
 ) noexcept
@@ -196,19 +195,19 @@ RuleMatch MatchEmbeddedNumber(
     const auto remaining =
         input.substr(number_start);
 
-    const RuleMatch local =
-        rule.Match(
+    const NumericScan local =
+        NumericScanner::Scan(
             remaining,
             0
         );
 
-    if (!local.Matched())
+    if (!local.matched)
         return {};
 
-    return RuleMatch{
-        RuleType::Number,
+    return NumericScan{
         number_start,
-        local.byte_length
+        number_start + local.ByteLength(),
+        true
     };
 }
 
@@ -276,20 +275,19 @@ RuleMatch CurrencyRule::Match(
         if (number_start >= input.size())
             continue;
 
-        const RuleMatch number =
+        const NumericScan number =
             MatchEmbeddedNumber(
-                number_rule_,
                 input,
                 number_start
             );
 
-        if (!number.Matched())
+        if (!number.matched)
             continue;
 
         return RuleMatch{
             RuleType::Currency,
             byte_offset,
-            number.ByteEnd() -
+            number.end -
                 byte_offset
         };
     }
@@ -301,20 +299,20 @@ RuleMatch CurrencyRule::Match(
      * 500 INR
      * 1,000.50 EUR
      */
-    const RuleMatch number =
-        number_rule_.Match(
+    const NumericScan number =
+        NumericScanner::Scan(
             input,
             byte_offset
         );
 
-    if (!number.Matched() ||
-        number.byte_start != byte_offset)
+    if (!number.matched ||
+        number.start != byte_offset)
     {
         return {};
     }
 
     usize code_start =
-        number.ByteEnd();
+        number.end;
 
     while (code_start < input.size() &&
            (input[code_start] == ' ' ||
@@ -323,7 +321,7 @@ RuleMatch CurrencyRule::Match(
         ++code_start;
     }
 
-    if (code_start == number.ByteEnd())
+    if (code_start == number.end)
         return {};
 
     for (const auto& prefix : Prefixes)

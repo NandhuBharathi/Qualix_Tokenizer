@@ -1,6 +1,9 @@
 #include "pretokenizer/pretokenizer.hpp"
 
 #include <memory>
+#include <chrono>
+#include <iostream>
+#include <iomanip>
 
 #include "pretokenizer/grapheme_classifier.hpp"
 #include "rules/rule_engine.hpp"
@@ -163,8 +166,32 @@ Result<std::vector<Span>> PreTokenizer::Split(
     std::string_view input
 )
 {
+    using ProfileClock =
+        std::chrono::steady_clock;
+
+    double profile_segment = 0.0;
+    double profile_rules = 0.0;
+    double profile_advance = 0.0;
+    double profile_classifier = 0.0;
+    double profile_span = 0.0;
+
+    const auto profile_total_start =
+        ProfileClock::now();
+
+    const auto profile_segment_start =
+        ProfileClock::now();
+
     auto segmented =
         unicode::GraphemeSegmenter::Segment(input);
+
+    const auto profile_segment_end =
+        ProfileClock::now();
+
+    profile_segment =
+        std::chrono::duration<double>(
+            profile_segment_end -
+            profile_segment_start
+        ).count();
 
     if (segmented.Failed())
         return Status::Failure(
@@ -191,11 +218,23 @@ Result<std::vector<Span>> PreTokenizer::Split(
         const auto& grapheme =
             graphemes[index];
 
+        const auto profile_rule_start =
+            ProfileClock::now();
+
         const auto rule_match =
             rule_engine.MatchAt(
                 input,
                 grapheme.byte_start
             );
+
+        const auto profile_rule_end =
+            ProfileClock::now();
+
+        profile_rules +=
+            std::chrono::duration<double>(
+                profile_rule_end -
+                profile_rule_start
+            ).count();
 
         if (rule_match.Matched())
         {
@@ -204,12 +243,24 @@ Result<std::vector<Span>> PreTokenizer::Split(
 
             usize end_index = index;
 
+            const auto profile_advance_start =
+                ProfileClock::now();
+
             while (end_index < graphemes.size() &&
                    graphemes[end_index].byte_start <
                        match_end)
             {
                 ++end_index;
             }
+
+            const auto profile_advance_end =
+                ProfileClock::now();
+
+            profile_advance +=
+                std::chrono::duration<double>(
+                    profile_advance_end -
+                    profile_advance_start
+                ).count();
 
             if (end_index > index &&
                 graphemes[end_index - 1].ByteEnd() ==
@@ -236,8 +287,20 @@ Result<std::vector<Span>> PreTokenizer::Split(
         const auto view =
             grapheme.View(input);
 
+        const auto profile_classifier_start =
+            ProfileClock::now();
+
         const auto grapheme_class =
             GraphemeClassifier::Classify(view);
+
+        const auto profile_classifier_end =
+            ProfileClock::now();
+
+        profile_classifier +=
+            std::chrono::duration<double>(
+                profile_classifier_end -
+                profile_classifier_start
+            ).count();
 
         const auto span_type =
             ToSpanType(grapheme_class);
@@ -263,6 +326,9 @@ Result<std::vector<Span>> PreTokenizer::Split(
             continue;
         }
 
+        const auto profile_span_start =
+            ProfileClock::now();
+
         output.push_back(
             Span{
                 grapheme.byte_start,
@@ -274,8 +340,53 @@ Result<std::vector<Span>> PreTokenizer::Split(
             }
         );
 
+        const auto profile_span_end =
+            ProfileClock::now();
+
+        profile_span +=
+            std::chrono::duration<double>(
+                profile_span_end -
+                profile_span_start
+            ).count();
+
         ++index;
     }
+
+    const auto profile_total_end =
+        ProfileClock::now();
+
+    const double profile_total =
+        std::chrono::duration<double>(
+            profile_total_end -
+            profile_total_start
+        ).count();
+
+    const double profile_known =
+        profile_segment +
+        profile_rules +
+        profile_advance +
+        profile_classifier +
+        profile_span;
+
+    std::cout
+        << "\n--- #87 PRETOKENIZER INTERNAL PROFILE ---\n"
+        << "Grapheme segment : "
+        << std::fixed << std::setprecision(3)
+        << profile_segment << " s\n"
+        << "Rule matching     : "
+        << profile_rules << " s\n"
+        << "Matched advance   : "
+        << profile_advance << " s\n"
+        << "Classifier        : "
+        << profile_classifier << " s\n"
+        << "Span construction : "
+        << profile_span << " s\n"
+        << "Unaccounted       : "
+        << (profile_total - profile_known)
+        << " s\n"
+        << "Total             : "
+        << profile_total << " s\n"
+        << "-----------------------------------------\n";
 
     return output;
 }

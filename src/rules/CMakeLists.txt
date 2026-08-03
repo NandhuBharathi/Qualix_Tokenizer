@@ -3,6 +3,7 @@ target_sources(
     PRIVATE
         rule_engine.cpp
         url_rule.cpp
+        numeric_scanner.cpp
         number_rule.cpp
         email_rule.cpp
         percentage_rule.cpp

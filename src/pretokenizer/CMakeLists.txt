@@ -3,4 +3,5 @@ target_sources(
     PRIVATE
         grapheme_classifier.cpp
         pretokenizer.cpp
+        streaming_pretokenizer.cpp
 )

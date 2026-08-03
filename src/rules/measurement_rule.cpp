@@ -1,6 +1,6 @@
 #include "rules/measurement_rule.hpp"
+#include "rules/numeric_scanner.hpp"
 
-#include <array>
 #include <string_view>
 
 namespace qualix::rules
@@ -9,26 +9,69 @@ namespace qualix::rules
 namespace
 {
 
-constexpr std::array<std::string_view, 34> kUnits = {
-    "mm", "cm", "km", "m",
-    "mg", "kg", "g",
-    "ml", "mL", "L",
+
+NumericScanPolicy MeasurementNumericPolicy() noexcept
+{
+    NumericScanPolicy policy{};
+
+    policy.allow_based_numbers=false;
+    policy.allow_grouping=false;
+    policy.allow_underscore=false;
+    policy.allow_leading_dot=false;
+    policy.allow_trailing_dot=false;
+    policy.allow_sign=true;
+    policy.allow_exponent=true;
+
+    return policy;
+}
+
+
+constexpr std::string_view kUnits[] = {
+    // Length
+    "mm", "cm", "dm", "km", "m",
     "in", "ft", "yd", "mi",
+
+    // Mass
+    "mg", "kg", "g",
     "lb", "oz",
-    "°C", "°F",
+
+    // Volume
+    "ml", "mL", "cl", "dL", "L",
+
+    // Area / volume
+    "mm2", "cm2", "m2", "km2",
+    "mm3", "cm3", "m3",
+
+    // Speed
+    "m/s", "km/h", "kmph", "mph", "ft/s",
+
+    // Time
+    "ns", "us", "ms", "s", "min", "h",
+
+    // Temperature
+    "°C", "°F", "K",
+
+    // Frequency
     "Hz", "kHz", "MHz", "GHz",
-    "W", "kW", "MW",
-    "V", "mV", "kV",
+
+    // Power
+    "W", "kW", "MW", "GW",
+
+    // Voltage
+    "mV", "V", "kV",
+
+    // Current
+    "mA", "A", "kA",
+
+    // Energy
+    "J", "kJ", "MJ",
+    "Wh", "kWh",
+
+    // Data
     "B", "KB", "MB", "GB", "TB",
-    "ms"
+    "KiB", "MiB", "GiB", "TiB"
 };
 
-constexpr bool IsDigit(
-    char c
-) noexcept
-{
-    return c >= '0' && c <= '9';
-}
 
 constexpr bool IsAsciiLetter(
     char c
@@ -39,77 +82,6 @@ constexpr bool IsAsciiLetter(
         (c >= 'a' && c <= 'z');
 }
 
-usize MatchNumberPrefix(
-    std::string_view input,
-    usize offset
-) noexcept
-{
-    usize i = offset;
-
-    if (i < input.size() &&
-        (input[i] == '+' ||
-         input[i] == '-'))
-    {
-        ++i;
-    }
-
-    const usize integer_start = i;
-
-    while (i < input.size() &&
-           IsDigit(input[i]))
-    {
-        ++i;
-    }
-
-    if (i == integer_start)
-        return offset;
-
-    if (i < input.size() &&
-        input[i] == '.')
-    {
-        const usize dot = i;
-        ++i;
-
-        const usize fraction_start = i;
-
-        while (i < input.size() &&
-               IsDigit(input[i]))
-        {
-            ++i;
-        }
-
-        if (i == fraction_start)
-            i = dot;
-    }
-
-    if (i < input.size() &&
-        (input[i] == 'e' ||
-         input[i] == 'E'))
-    {
-        const usize exponent = i;
-        ++i;
-
-        if (i < input.size() &&
-            (input[i] == '+' ||
-             input[i] == '-'))
-        {
-            ++i;
-        }
-
-        const usize exponent_start = i;
-
-        while (i < input.size() &&
-               IsDigit(input[i]))
-        {
-            ++i;
-        }
-
-        if (i == exponent_start)
-            i = exponent;
-    }
-
-    return i;
-}
 
 std::string_view MatchUnit(
     std::string_view input,
@@ -160,14 +132,19 @@ RuleMatch MeasurementRule::Match(
     if (byte_offset >= input.size())
         return {};
 
-    const usize number_end =
-        MatchNumberPrefix(
+    const NumericScan number =
+        NumericScanner::ScanRaw(
             input,
-            byte_offset
+            byte_offset,
+            MeasurementNumericPolicy()
         );
 
-    if (number_end == byte_offset)
+    if (!number.matched)
         return {};
+
+    const usize number_end =
+        number.end;
+
 
     usize unit_offset =
         number_end;

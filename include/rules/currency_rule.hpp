@@ -1,6 +1,6 @@
 #pragma once
 
-#include "rules/number_rule.hpp"
+#include "rules/numeric_scanner.hpp"
 #include "rules/rule.hpp"
 
 namespace qualix::rules
@@ -21,8 +21,6 @@ public:
         usize byte_offset
     ) const noexcept override;
 
-private:
-    NumberRule number_rule_;
 };
 
 } // namespace qualix::rules
